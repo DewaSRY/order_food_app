@@ -1,0 +1,9 @@
+services:
+  eurekaserver:
+    build:
+      context: ../apps/eurekaserver
+    ports:
+      - "8761:8761"
+
+    
+    

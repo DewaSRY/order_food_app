@@ -10,10 +10,10 @@
 	</parent>
 	<groupId>com.sdewa</groupId>
 	<artifactId>eurekaserver</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
+	<version>0.0.1</version>
+	<name>Eureka Server</name>
+	<description>Spring Boot Eureka Server</description>
+	
 	<licenses>
 		<license/>
 	</licenses>
