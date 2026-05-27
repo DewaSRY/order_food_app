@@ -1,9 +1,21 @@
 services:
+
   eurekaserver:
     build:
       context: ../apps/eurekaserver
     ports:
       - "8761:8761"
+    
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: restaurantdb
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
 
-    
-    
+
+volumes:
+  mysql-data:

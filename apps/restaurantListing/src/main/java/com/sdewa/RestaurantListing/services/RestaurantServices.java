@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RestaurantServices {
+
     private final RestaurantRepository restaurantRepository;
 
     public List<RestaurantDto> getAllRestaurants() {
@@ -30,7 +31,7 @@ public class RestaurantServices {
 
     public RestaurantDto createRestaurant(RestaurantDto restaurantDto) {
         RestaurantEntity entity = toEntity(restaurantDto);
-        entity.setId(null); // Ensure id is not set for new entity
+        entity.setId(null);
         RestaurantEntity saved = restaurantRepository.save(entity);
         return toDto(saved);
     }
