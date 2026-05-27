@@ -1,20 +1,36 @@
 services:
 
-  eurekaserver:
-    build:
-      context: ../apps/eurekaserver
-    ports:
-      - "8761:8761"
-    
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: restaurantdb
     ports:
       - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+
+
+  eurekaserver:
+    build:
+      context: ../apps/eurekaserver
+    ports:
+      - "8761:8761"
+  
+  restaurantlisting:
+    build:
+      context: ../apps/restaurantListing
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=password
+      - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
+    depends_on:
+      - eurekaserver
+      - mysql 
 
 
 volumes:
