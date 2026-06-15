@@ -7,4 +7,7 @@ compose-up:
 compose-down:
 	docker-compose -f docker/docker-compose.yaml down
 
-.PHONY: compose-up compose-down
+compose-clean: 
+	docker-compose -f docker/docker-compose.yaml down --rmi all --volumes --remove-orphans
+
+.PHONY: compose-up compose-down compose-clean
