@@ -15,6 +15,28 @@ services:
       - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ppassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mongodb:
+    image: mongo:noble
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   user:
     build:
@@ -47,6 +69,19 @@ services:
       - eurekaserver
       - mysql 
 
+  order:
+    build:
+      context: ../apps/order
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DATABASE_URL: mongodb://root:password@mongodb:27017/restaurantdb?authSource=admin
+      EUREKA_SERVER_URL: http://eurekaserver:8761/eureka/
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
 
   foodcatalogue:
     build:
@@ -67,3 +102,4 @@ services:
 
 volumes:
   mysql-data:
+  mongo-data:
