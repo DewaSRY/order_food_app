@@ -17,25 +17,24 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FoodItemServices {
     private final FoodItemRepo foodItemRepo;
-    private final FoodItemMapper foodItemMapper;
 
     public List<FoodItemDTO> getAllFoodItems() {
         return foodItemRepo.findAll().stream()
-                .map(foodItemMapper::toDto)
+                .map(FoodItemMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
     public FoodItemDTO getFoodItemById(Long id) {
         Optional<FoodItemEntity> entity = foodItemRepo.findById(id);
-        return entity.map(foodItemMapper::toDto).orElse(null);
+        return entity.map(FoodItemMapper.INSTANCE::toDto).orElse(null);
     }
 
     @Transactional
     public FoodItemDTO createFoodItem(FoodItemDTO foodItemDTO) {
-        FoodItemEntity entity = foodItemMapper.toEntity(foodItemDTO);
+        FoodItemEntity entity = FoodItemMapper.INSTANCE.toEntity(foodItemDTO);
         entity.setId(0); // Ensure new entity
         FoodItemEntity saved = foodItemRepo.save(entity);
-        return foodItemMapper.toDto(saved);
+        return FoodItemMapper.INSTANCE.toDto(saved);
     }
 
     @Transactional
@@ -52,8 +51,7 @@ public class FoodItemServices {
 
             entity.setQuantity(foodItemDTO.getQuantity());
             FoodItemEntity updated = foodItemRepo.save(entity);
-            
-            return foodItemMapper.toDto(updated);
+            return FoodItemMapper.INSTANCE.toDto(updated);
         }
         return null;
     }
