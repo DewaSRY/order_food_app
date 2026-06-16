@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sdewa.RestaurantListing.dto.RestaurantDto;
-
 import com.sdewa.RestaurantListing.repository.RestaurantRepository;
 import com.sdewa.RestaurantListing.entity.RestaurantEntity;
+import com.sdewa.RestaurantListing.mapstruct.Mapstruct;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,21 +19,21 @@ public class RestaurantServices {
 
     public List<RestaurantDto> getAllRestaurants() {
         return restaurantRepository.findAll().stream()
-                .map(this::toDto)
+                .map(Mapstruct.INSTANCE::restaurantToDto)
                 .toList();
     }
 
     public RestaurantDto getRestaurantById(Long id) {
         return restaurantRepository.findById(id)
-                .map(this::toDto)
+                .map(Mapstruct.INSTANCE::restaurantToDto)
                 .orElseThrow(() -> new RuntimeException("Restaurant not found with id: " + id));
     }
 
     public RestaurantDto createRestaurant(RestaurantDto restaurantDto) {
-        RestaurantEntity entity = toEntity(restaurantDto);
+        RestaurantEntity entity = Mapstruct.INSTANCE.restaurantToEntity(restaurantDto);
         entity.setId(null);
         RestaurantEntity saved = restaurantRepository.save(entity);
-        return toDto(saved);
+        return Mapstruct.INSTANCE.restaurantToDto(saved);
     }
 
     public RestaurantDto updateRestaurant(Long id, RestaurantDto restaurantDto) {
@@ -44,7 +44,7 @@ public class RestaurantServices {
         entity.setCuisineType(restaurantDto.getCuisineType());
         entity.setCity(restaurantDto.getCity());
         RestaurantEntity updated = restaurantRepository.save(entity);
-        return toDto(updated);
+        return Mapstruct.INSTANCE.restaurantToDto(updated);
     }
 
     public void deleteRestaurant(Long id) {
@@ -52,25 +52,5 @@ public class RestaurantServices {
             throw new RuntimeException("Restaurant not found with id: " + id);
         }
         restaurantRepository.deleteById(id);
-    }
-
-    private RestaurantDto toDto(RestaurantEntity entity) {
-        return RestaurantDto.builder()
-                .id(entity.getId() != null ? entity.getId() : 0)
-                .name(entity.getName())
-                .address(entity.getAddress())
-                .cuisineType(entity.getCuisineType())
-                .city(entity.getCity())
-                .build();
-    }
-
-    private RestaurantEntity toEntity(RestaurantDto dto) {
-        return RestaurantEntity.builder()
-                .id(dto.getId() != 0 ? dto.getId() : null)
-                .name(dto.getName())
-                .address(dto.getAddress())
-                .cuisineType(dto.getCuisineType())
-                .city(dto.getCity())
-                .build();
     }
 }

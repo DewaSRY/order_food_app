@@ -1,5 +1,11 @@
 services:
 
+  eurekaserver:
+    build:
+      context: ../apps/eurekaserver
+    ports:
+      - "8761:8761"
+
   mysql:
     image: mysql:8.0
     environment:
@@ -10,13 +16,6 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
 
-
-  eurekaserver:
-    build:
-      context: ../apps/eurekaserver
-    ports:
-      - "8761:8761"
-  
   restaurantlisting:
     build:
       context: ../apps/restaurantListing
