@@ -1,12 +1,16 @@
 package com.sdewa.auth.jwtauthentication;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import java.util.function.Predicate;
 
 @Service
 public class JwtServicesImpl implements JwtServices {
@@ -23,9 +27,34 @@ public class JwtServicesImpl implements JwtServices {
     }
 
     @Override
-    public boolean validateToken(String secret, String token) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validateToken'");
+    public JwtClaim parseToken(String secret, String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return JwtClaim.fromMap(claims);
+    }
+
+    @Override
+    public Optional<JwtClaim> parseToken(String secret, String token, Predicate<Claims> claimPredicate) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)))
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+            if (claimPredicate.test(claims)) {
+                return Optional.empty();
+            }
+
+            return Optional.of(JwtClaim.fromMap(claims));
+
+        } catch (JwtException | IllegalArgumentException e) {
+            return Optional.empty();
+        }
     }
 
 }

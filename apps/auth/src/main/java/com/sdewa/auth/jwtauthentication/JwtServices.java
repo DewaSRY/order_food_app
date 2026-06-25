@@ -1,7 +1,15 @@
 package com.sdewa.auth.jwtauthentication;
 
-public interface JwtServices {
-    String generateToken(String secreet, long expiration, JwtClaim claim);
+import java.util.Optional;
+import java.util.function.Predicate;
 
-    boolean validateToken(String secret, String token);
+import io.jsonwebtoken.Claims;
+
+public interface JwtServices {
+    String generateToken(String secret, long expiration, JwtClaim claim);
+
+    JwtClaim parseToken(String secret, String token);
+
+    Optional<JwtClaim> parseToken(String secret, String token, Predicate<Claims> claimPredicate);
+
 }

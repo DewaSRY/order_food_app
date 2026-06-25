@@ -1,0 +1,15 @@
+jwt:
+  secret: dGVzdFNlY3JldEtleUZvckpXVEF1dGhlbnRpY2F0aW9uMTIzNDU2Nzg5MDEyMzQ1Njc4OTA=
+  expiration: 3600000
+  refreshExpiration: 86400000
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false

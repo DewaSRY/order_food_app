@@ -2,12 +2,14 @@ package com.sdewa.auth.jwtauthentication;
 
 import java.util.Map;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class JwtClaim {
-    public String userid;
-    public String email;
+    private String userid;
+    private String email;
 
     public static Map<String, Object> toMap(JwtClaim claim) {
         return Map.of(
@@ -16,9 +18,9 @@ public class JwtClaim {
     }
 
     public static JwtClaim fromMap(Map<String, Object> map) {
-        JwtClaim claim = new JwtClaim();
-        claim.setUserid((String) map.get("userid"));
-        claim.setEmail((String) map.get("email"));
-        return claim;
+        return JwtClaim.builder()
+                .userid((String) map.get("userid"))
+                .email((String) map.get("email"))
+                .build();
     }
 }

@@ -1,5 +1,4 @@
 services:
-
   eurekaserver:
     build:
       context: ../apps/eurekaserver
@@ -51,8 +50,7 @@ services:
       - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
     depends_on:
       - eurekaserver
-      - mysql 
-
+      - mysql
 
   restaurantlisting:
     build:
@@ -67,7 +65,7 @@ services:
       - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
     depends_on:
       - eurekaserver
-      - mysql 
+      - mysql
 
   order:
     build:
@@ -75,9 +73,9 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_PROFILES_ACTIVE: dev
-      DATABASE_URL: mongodb://root:password@mongodb:27017/restaurantdb?authSource=admin
-      EUREKA_SERVER_URL: http://eurekaserver:8761/eureka/
+      - SPRING_PROFILES_ACTIVE=dev
+      - DATABASE_URL=mongodb://root:password@mongodb:27017/restaurantdb?authSource=admin
+      - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
     depends_on:
       mongodb:
         condition: service_healthy
@@ -96,9 +94,22 @@ services:
       - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
     depends_on:
       - eurekaserver
-      - mysql 
+      - mysql
 
-
+  auth:
+    build:
+      context: ../apps/auth
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=password
+      - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
+    depends_on:
+      - eurekaserver
+      - mysql
 
 volumes:
   mysql-data:
