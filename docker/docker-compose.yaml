@@ -37,64 +37,64 @@ services:
       timeout: 5s
       retries: 10
 
-  user:
-    build:
-      context: ../apps/user
-    ports:
-      - "8081:8081"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
-      - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=password
-      - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
-    depends_on:
-      - eurekaserver
-      - mysql
+  # user:
+  #   build:
+  #     context: ../apps/user
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=dev
+  #     - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
+  #     - DATABASE_USERNAME=root
+  #     - DATABASE_PASSWORD=password
+  #     - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
+  #   depends_on:
+  #     - eurekaserver
+  #     - mysql
 
-  restaurantlisting:
-    build:
-      context: ../apps/restaurantListing
-    ports:
-      - "8082:8082"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
-      - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=password
-      - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
-    depends_on:
-      - eurekaserver
-      - mysql
+  # restaurantlisting:
+  #   build:
+  #     context: ../apps/restaurantListing
+  #   ports:
+  #     - "8082:8082"
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=dev
+  #     - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
+  #     - DATABASE_USERNAME=root
+  #     - DATABASE_PASSWORD=password
+  #     - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
+  #   depends_on:
+  #     - eurekaserver
+  #     - mysql
 
-  order:
-    build:
-      context: ../apps/order
-    ports:
-      - "8083:8083"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DATABASE_URL=mongodb://root:password@mongodb:27017/restaurantdb?authSource=admin
-      - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    restart: unless-stopped
+  # order:
+  #   build:
+  #     context: ../apps/order
+  #   ports:
+  #     - "8083:8083"
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=dev
+  #     - DATABASE_URL=mongodb://root:password@mongodb:27017/restaurantdb?authSource=admin
+  #     - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
+  #   depends_on:
+  #     mongodb:
+  #       condition: service_healthy
+  #   restart: unless-stopped
 
-  foodcatalogue:
-    build:
-      context: ../apps/foodCatalogue
-    ports:
-      - "8084:8084"
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
-      - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=password
-      - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
-    depends_on:
-      - eurekaserver
-      - mysql
+  # foodcatalogue:
+  #   build:
+  #     context: ../apps/foodCatalogue
+  #   ports:
+  #     - "8084:8084"
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=dev
+  #     - DATABASE_URL=jdbc:mysql://mysql:3306/restaurantdb
+  #     - DATABASE_USERNAME=root
+  #     - DATABASE_PASSWORD=password
+  #     - EUREKA_SERVER_URL=http://eurekaserver:8761/eureka/
+  #   depends_on:
+  #     - eurekaserver
+  #     - mysql
 
   auth:
     build:
