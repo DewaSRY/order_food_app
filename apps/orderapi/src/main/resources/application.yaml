@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: orderapi
+  datasource:
+    url: jdbc:mysql://localhost:3306/orderdb
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
